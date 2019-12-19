@@ -11,7 +11,7 @@ puts File.open("input.txt").readlines.map(&:to_i).inject(0) { |sum, mass| sum + 
 # my ans: 5178170
 
 # include the mass of the fuel itself in the calculation
-puts "Part Two:"
+puts "\nPart Two:"
 
 def getFuel(mass)
 	sum = 0
