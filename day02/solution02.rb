@@ -10,32 +10,56 @@
 
 puts "Part One:"
 
-def intcode(op)
-	curr = 0
+def intcode(ops)
+	ptr = 0
 
-	while true
-		case op[curr]
+	loop do
+		case ops[ptr]
 		when 1
-			op[op[curr+3]] = op[op[curr+1]] + op[op[curr+2]]
+			ops[ops[ptr+3]] = ops[ops[ptr+1]] + ops[ops[ptr+2]]
 		when 2
-			op[op[curr+3]] = op[op[curr+1]] * op[op[curr+2]]
+			ops[ops[ptr+3]] = ops[ops[ptr+1]] * ops[ops[ptr+2]]
 		when 99
-			puts op[0]
+			return ops[0]
 			break
 		else
-			raise "invalid opcode sequence"
+			# raise "invalid opcode sequence"
+			return -1
 			break
 		end
-		curr+=4
+		ptr+=4
 	end
 end
 
-intcode(File.open("input.txt").read.split(",").map(&:to_i))
+ops = File.open("input.txt").read.split(",").map(&:to_i)
+ops[1] = 12
+ops[2] = 2
+puts intcode(ops)
 
 # part two
 # https://adventofcode.com/2019/day/2#part2
-# my ans: _
+# my ans: 4925
 
-# ...
+# find the values for ops[1] (noun) and ops[2] (verb) s/t result is desired_output
+# values are in range (0, 99)
 puts "\nPart Two:"
 
+def findNounVerb()
+	desired_output = 19690720
+	unaltered = File.open("input.txt").read.split(",").map(&:to_i)
+	for noun in 0..99 do
+		for verb in 0..99 do
+			ops = unaltered.clone
+			ops[1] = noun
+			ops[2] = verb
+			result = intcode(ops)
+			if result == desired_output
+				puts "Noun: " + noun.to_s
+				puts "Verb: " + verb.to_s
+				return 100 * noun + verb
+			end
+		end
+	end
+end
+
+puts findNounVerb()
