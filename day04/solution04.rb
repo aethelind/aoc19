@@ -42,6 +42,49 @@ puts passFinder(range[0], range[1])
 
 # part two
 # https://adventofcode.com/2019/day/4#part2
-# my ans: _
+# my ans: 358
 
-# explanation
+# new rule; there must be at least one instance of only two repeating digits
+
+def passFinderDouble(l, u)
+    passwords = 0
+
+    for pass in l..u
+        if validate(pass)
+            passwords += 1
+        end
+    end
+
+    return passwords
+end
+
+
+def validate(pass)
+    double = false
+    increasing = true
+    prev = -1
+    count = 1
+
+    for i in 0..5
+        curr = pass.to_s[i].to_i
+        
+        if prev == curr
+            count += 1
+        else
+            if count == 2
+                double = true
+            end
+            count = 1
+        end
+        
+        if prev > curr
+            increasing = false
+        end
+
+        prev = curr
+    end
+    return (double || count == 2) && increasing
+end
+
+range = File.open("input.txt").read.split("-").map(&:to_i)
+puts passFinderDouble(range[0], range[1])
