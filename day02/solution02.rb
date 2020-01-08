@@ -3,7 +3,7 @@
 # my ans: 5305097
 
 # write intcode computer.
-# cod 1 looks at the position indicated in the next two positions, and places their sum in the position indicated b the third positon.
+# code 1 looks at the position indicated in the next two positions, and places their sum in the position indicated b the third positon.
 # code 2 does the same with their product.
 # code 99 halts
 # also changed input[1] with 12, and [2] with 2.
