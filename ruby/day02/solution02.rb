@@ -1,6 +1,6 @@
 # part one
 # https://adventofcode.com/2019/day/2
-# my ans: 5305097
+# my ans: 5305097 
 
 # write intcode computer.
 # code 1 looks at the position indicated in the next two positions, and places their sum in the position indicated b the third positon.
