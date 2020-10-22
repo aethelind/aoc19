@@ -14,9 +14,6 @@
 // add support for immediate mode 1, where a parameter is interpreted as a value rather than a place.
 //
 
-// get input
-def data = new File('groovy/day05/input.txt').text.split(",").collect { it as int }
-
 def parseOpcode (op) {
   // if op is ABCDE
   // DE = two digit opcode
@@ -65,6 +62,32 @@ def intcode (ops, input) {
         output = ops[a]
         ptr += 2
         break
+      case 5:
+        // jump-if-true
+        if (ops[a]) {
+          ptr = ops[b]
+        } else {
+          ptr += 3
+        }
+        break
+      case 6:
+        // jump-if-false
+        if (!ops[a]) {
+          ptr = ops[b]
+        } else {
+          ptr += 3
+        }
+        break
+      case 7:
+        // less than
+        ops[c] = (ops[a] < ops[b]) ? 1 : 0
+        ptr += 4
+        break
+      case 8:
+        // equals
+        ops[c] = (ops[a] == ops[b]) ? 1 : 0
+        ptr += 4
+        break
       default:
         throw new Exception("Opcode '${ops[ptr]}' not recognized")
     }
@@ -74,11 +97,19 @@ def intcode (ops, input) {
 }
 
 print "Part One: "
+def data = new File('groovy/day05/input.txt').text.split(",").collect { it as int }
 println intcode(data, 1)
 
 // part two
 // https://adventofcode.com/2019/day/5#part2
-// my ans: _
+// my ans: 13758663
+
+// new:
+// code 5: jump-if-true, if first param is non-zero, set the instruction pointer to the value from the second param.
+// code 6: jump-if-false, if first param is zero, set the instruction pointer to the value from the second param.
+// code 7: less than, if the first param is less than the second param, store 1 in the pos given by the third param, else store 0.
+// code 8: equals, if the first param is equal to the second param, store 1 in the pos given by the third param, else store 0.
 
 print "Part Two: "
-println "ans"
+data = new File('groovy/day05/input.txt').text.split(",").collect { it as int }
+println intcode(data, 5)
