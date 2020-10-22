@@ -1,6 +1,6 @@
 // part one
 // https://adventofcode.com/2019/day/5
-// my ans: _
+// my ans: 7988899
 
 // write intcode computer.
 // code 1 looks at the position indicated in the next two positions, and places their sum in the position indicated b the third positon.
@@ -15,59 +15,70 @@
 //
 
 // get input
-// def range = new File('groovy/day04/input.txt').text.split("-").collect { it as int }
+def data = new File('groovy/day05/input.txt').text.split(",").collect { it as int }
 
 def parseOpcode (op) {
-  // ABCDE
+  // if op is ABCDE
   // DE = two digit opcode
+  // C = 1st param mode, B = 2nd param mode, A = 3rd param mode
   // ABC may be missing preceding zeros
 
+  // get all three modes
   while (op.size() < 5) {
     op = "0" + op
   }
-  return [op[0], op[1], op[2], op[3..4]]
+
+  return [op[2].toBoolean(), op[1].toBoolean(), op[0].toBoolean(), op[3..4] as int]
 }
 
-println parseOpcode(1002 as String)
-
-def intcode (ops) {
+def intcode (ops, input) {
   ptr = 0
-  inputParam = 1
+  output = 0
 
-  while (ops[ptr] != 99) {
-    switch(ops[ptr]){
+  while (true) {
+    op = parseOpcode(ops[ptr] as String)
+
+    if (op[3] == 99) { break }
+
+    a = op[0] ? ptr + 1 : ops[ptr+1]
+    b = op[1] ? ptr + 2 : ops[ptr+2]
+    c = op[2] ? ptr + 3 : ops[ptr+3]
+
+    switch(op[3]){
       case 1:
         // addition
-        ops[ops[ptr+3]] = ops[ops[ptr+1]] + ops[ops[ptr+2]]
+        ops[c] = ops[a] + ops[b]
         ptr += 4
         break
       case 2:
         // multiplication
-        ops[ops[ptr+3]] = ops[ops[ptr+1]] * ops[ops[ptr+2]]
+        ops[c] = ops[a] * ops[b]
         ptr += 4
         break
       case 3:
-        println ""
+        // set input value
+        ops[a] = input
         ptr += 2
         break
       case 4:
-        println ops[ptr] // should be zero
+        // get output value
+        output = ops[a]
         ptr += 2
         break
       default:
-        println "opcode not recognized"
+        throw new Exception("Opcode '${ops[ptr]}' not recognized")
     }
-
-
   }
 
-  return ops
+  return output
 }
 
-
 print "Part One: "
-println "ans"
+println intcode(data, 1)
 
+// part two
+// https://adventofcode.com/2019/day/5#part2
+// my ans: _
 
 print "Part Two: "
 println "ans"
